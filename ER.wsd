@@ -1,0 +1,88 @@
+@startuml
+title natchApp
+'マスタ(システムが持つデフォルトの情報)
+class EMOTION_CATEGORY {
+  'Negative/Positive/Neutral
+  +id: int
+  +name: string
+}
+
+'システムが作成、管理する情報
+'通知関連
+class USER_NOTIFICATIONS {
+  +user_id: int
+  +no: int
+  +status: int
+}
+'Google認証関連
+'どんな情報が必要なのか要調査
+
+'ログ
+class ACCESS_LOGS {
+  +no: int
+  +path: varchar
+  +ip_address: varchar
+  +user_agent: varchar
+}
+
+'ユーザ情報
+class USERS {
+  +user_id: int
+  +user_name: varchar
+  +pass_word: varchar
+  +mail_address: varchar
+  +delete_flag: int
+}
+'ログイン履歴
+class LOGIN_HISTORIES {
+  +user_id: int
+  +login_count: int
+  +login_date_time: timestamp
+  +ip_address: varchar
+  +user_agent: varchar
+}
+'ユーザごとの設定（通知頻度、他にあれば)
+class USERS_CONFIGS {
+  +user_id: int
+  +config_name: varchar
+  +config_value: varchar
+}
+'ユーザごとの設定(Emotino,Action)
+class ACTION_NAME {
+  +action_id: int
+  +user_id: int
+  +name: varchar
+}
+class EMOTION_NAME {
+  +emotion_id: int
+  +user_id: int
+  +name: varchar
+}
+'ユーザごとのストック情報
+class ACTION {
+  +action_id: int
+  +user_id: int
+  +hour: int
+  +minutes_div: int
+  +timestamp: timestamp
+}
+class EMOTION {
+  +emotion_id: int
+  +user_id: int
+  +hour: int
+  +minutes_div: int
+  +timestamp: timestamp
+}
+
+EMOTION_CATEGORY "1" *-- "1..*" EMOTION_NAME
+EMOTION_NAME "1" *-- "1..*" EMOTION
+ACTION_NAME "1" *-- "1..*" ACTION
+
+USERS "*" *-- "1..*" LOGIN_HISTORIES
+USERS "*" *-- "1..*" USERS_CONFIGS
+USERS "*" *-- "1..*" ACTION
+USERS "*" *-- "1..*" EMOTION
+USERS "*" *-- "1..*" EMOTION_NAME
+USERS "*" *-- "1..*" USER_NOTIFICATIONS
+
+@enduml
